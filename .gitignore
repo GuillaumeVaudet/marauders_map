@@ -12,3 +12,6 @@ __pycache__/
 
 # secret file
 .env
+
+# database files
+data/*.sqlite*
