@@ -1,7 +1,4 @@
-from textual.app import App
-
-class MyApp(App):
-    pass
+from tui.app import MyApp
 
 if __name__ == "__main__":
     app = MyApp()
