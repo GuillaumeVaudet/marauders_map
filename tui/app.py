@@ -1,4 +1,8 @@
-from textual.app import App
+from textual.app import App, ComposeResult
+from tui.widgets.main_menu import MainMenu
 
-class MyApp(App):
-    pass
+class MaraudeurApp(App):
+    """A Textual app to manage wardriving data"""
+
+    def compose(self) -> ComposeResult:
+        yield MainMenu()
