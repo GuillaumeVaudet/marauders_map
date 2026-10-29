@@ -19,7 +19,23 @@ def read_header(target_file):
 
 def decode_metadata(data) -> Metadata:
     """decode given metadata and return a Metadata"""
-    return Metadata(*struct.unpack("<BbBBIiiH", data))
+    node_id, rssi, channel, band, timestamp, latitude, longitude, frame_len = struct.unpack("<BbBBIiiH", data)
+
+    if timestamp == 0:
+        timestamp = latitude = longitude = None
+    else:
+        latitude = latitude / 1e7
+        longitude = longitude / 1e7
+
+    return Metadata(
+        node_id, 
+        rssi,
+        channel,
+        band,
+        timestamp,
+        latitude,
+        longitude,
+        frame_len)
 
 
 def read_records(path: str | Path):
