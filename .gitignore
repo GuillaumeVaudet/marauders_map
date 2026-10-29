@@ -15,3 +15,6 @@ __pycache__/
 
 # database files
 data/*.sqlite*
+
+# testing files
+data_tests/
