@@ -6,6 +6,7 @@ Contains logic to read MMAP files.
 import struct
 from pathlib import Path
 
+from models.metadata import Metadata
 
 def read_header(target_file):
     """Check header of the open target file 'target_file and return version"""
@@ -16,24 +17,21 @@ def read_header(target_file):
     return header[4]
 
 
-def decode_metadata(data):
-    """decode given metadata and return a tuple"""
-    metadata = struct.unpack("<BbBBIiiH", data)
-    return metadata
+def decode_metadata(data) -> Metadata:
+    """decode given metadata and return a Metadata"""
+    return Metadata(*struct.unpack("<BbBBIiiH", data))
 
 
 def read_records(path: str | Path):
     """Open the 'path' file and read it's content"""
     with open(path, 'rb') as file:
         version = read_header(file)
-        print(f"Version : {version}")
         while True:
             meta_bytes = file.read(18)
             if not meta_bytes:
-                print(f"Number of records : {number_of_records}")
                 break
             metadata = decode_metadata(meta_bytes)
-            frame = file.read(metadata[-1])
+            frame = file.read(metadata.frame_len)
             yield (metadata, frame)
 
 
