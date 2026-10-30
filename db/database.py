@@ -1,14 +1,56 @@
 import sqlite3
+from sqlite3 import Connection
+import hashlib
 
 from models.metadata import Metadata
 
-def connect(database_name: str) -> sqlite3.Connection:
+
+def compute_file_hash(path: str):
+    hasher = hashlib.sha256()
+    with open(path, 'rb') as file:
+        while True:
+            bloc = file.read(65536)
+            if not bloc:
+                break    
+            hasher.update(bloc)
+    return hasher.hexdigest()
+
+
+def create_imported_file_table(database_connection: Connection):
+    database_connection.execute("""
+        CREATE TABLE IF NOT EXISTS imported_files (
+            id INTEGER PRIMARY KEY,
+            file_hash TEXT UNIQUE,
+            file_name TEXT,
+            imported_at TEXT DEFAULT CURRENT_TIMESTAMP
+        )
+    """)
+
+
+def is_already_imported(database_connection: Connection, file_hash) -> bool:
+    cursor = database_connection.execute(
+        "SELECT 1 FROM imported_files WHERE file_hash = ?",
+        (file_hash,)
+    )
+    result = cursor.fetchone()
+
+    return result is not None
+
+
+def mark_as_imported(database_connection: Connection, file_hash, file_name):
+    database_connection.execute(
+        "INSERT INTO imported_files (file_hash, file_name) VALUES (?, ?)",
+        (file_hash, file_name)
+    )
+
+
+def connect(database_name: str) -> Connection:
     full_name = "data/" + database_name + ".db"
     connection = sqlite3.connect(full_name)
     return connection
 
 
-def create_record_table(database_connection: sqlite3.Connection):
+def create_record_table(database_connection: Connection):
     database_connection.execute("""
         CREATE TABLE IF NOT EXISTS record (
             id INTEGER PRIMARY KEY,
@@ -24,7 +66,7 @@ def create_record_table(database_connection: sqlite3.Connection):
     """)
 
 
-def insert_record(database_connection: sqlite3.Connection, metadata: Metadata):
+def insert_record(database_connection: Connection, metadata: Metadata):
     database_connection.execute("""
         INSERT INTO record (node_id, rssi, channel, band, timestamp, 
         latitude, longitude, frame_len) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
@@ -40,11 +82,13 @@ if __name__ == "__main__":
     city_name = "lille"
     test_path = Path("data_tests/capture_003.bin")
 
-    connection = connect(city_name)
-    create_record_table(connection)
+    hashing = compute_file_hash(test_path)
+    print(hashing)
+    # connection = connect(city_name)
+    # create_record_table(connection)
 
-    for metadata, frame in read_records(test_path):
-        insert_record(connection, metadata)
+    # for metadata, frame in read_records(test_path):
+    #     insert_record(connection, metadata)
 
-    connection.commit()
-    connection.close()
+    # connection.commit()
+    # connection.close()
