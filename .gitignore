@@ -17,4 +17,4 @@ __pycache__/
 data/*.sqlite*
 
 # testing files
-data_tests/
+data_tests/data/
