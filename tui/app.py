@@ -1,4 +1,4 @@
-from textual.app import App, ComposeResult
+from textual.app import App
 from tui.screens.main_menu_screen import MainMenuScreen
 
 class MaraudeurApp(App):
