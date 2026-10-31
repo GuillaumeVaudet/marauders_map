@@ -3,6 +3,7 @@ from sqlite3 import Connection
 import hashlib
 
 from models.metadata import Metadata
+from core.reader import read_records
 
 
 def compute_file_hash(path: str):
@@ -75,20 +76,30 @@ def insert_record(database_connection: Connection, metadata: Metadata):
     )
 
 
+def import_file(path, city):
+    file_hash = compute_file_hash(path)
+    connection = connect(city)
+
+    create_record_table(connection)
+    create_imported_file_table(connection)
+
+    if is_already_imported(connection, file_hash):
+        print("File was already imported, please select another one")
+        connection.close()
+        return
+    
+    for metadata, frame in read_records(path):
+        insert_record(connection, metadata)
+
+    mark_as_imported(connection, file_hash, path.name)
+    connection.commit()
+    connection.close()
+
+
 if __name__ == "__main__":
-    from core.reader import read_records
     from pathlib import Path
 
     city_name = "lille"
     test_path = Path("data_tests/capture_003.bin")
 
-    hashing = compute_file_hash(test_path)
-    print(hashing)
-    # connection = connect(city_name)
-    # create_record_table(connection)
-
-    # for metadata, frame in read_records(test_path):
-    #     insert_record(connection, metadata)
-
-    # connection.commit()
-    # connection.close()
+    import_file(test_path, city_name)
