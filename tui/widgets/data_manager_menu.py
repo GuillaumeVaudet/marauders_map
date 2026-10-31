@@ -9,4 +9,4 @@ class DataManagerMenu(ListView):
         yield ListItem(Label("Create database"), id="create_database")
         yield ListItem(Label("View imported files"), id="view_imported_files")
         yield ListItem(Label("Delete database"), id="delete_database")
-        yield ListItem(Label("Delete all", id="delete_all"))
+        yield ListItem(Label("Delete all"),  id="delete_all")

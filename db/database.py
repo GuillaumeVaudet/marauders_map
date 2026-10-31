@@ -86,7 +86,7 @@ def import_file(path, city):
     if is_already_imported(connection, file_hash):
         print("File was already imported, please select another one")
         connection.close()
-        return
+        return False
     
     for metadata, frame in read_records(path):
         insert_record(connection, metadata)
@@ -94,7 +94,7 @@ def import_file(path, city):
     mark_as_imported(connection, file_hash, path.name)
     connection.commit()
     connection.close()
-
+    return True
 
 if __name__ == "__main__":
     from pathlib import Path
