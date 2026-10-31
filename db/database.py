@@ -1,9 +1,22 @@
+from pathlib import Path
 import sqlite3
 from sqlite3 import Connection
 import hashlib
 
 from models.metadata import Metadata
 from core.reader import read_records
+
+
+def list_databases():
+    return [path.stem for path in Path("data").glob("*.db")]
+
+
+def get_imported_files(database_connection: Connection):
+    cursor = database_connection.execute(
+        "SELECT file_name, imported_at FROM imported_files "
+        "ORDER BY imported_at"
+    )
+    return cursor.fetchall()
 
 
 def compute_file_hash(path: str):
@@ -97,7 +110,6 @@ def import_file(path, city):
     return True
 
 if __name__ == "__main__":
-    from pathlib import Path
 
     city_name = "lille"
     test_path = Path("data_tests/capture_003.bin")
