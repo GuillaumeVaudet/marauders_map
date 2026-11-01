@@ -90,6 +90,7 @@ def create_record_table(database_connection: Connection):
             latitude REAL,
             longitude REAL,
             frame_len INTEGER
+            frame BLOB
         )
     """)
 
