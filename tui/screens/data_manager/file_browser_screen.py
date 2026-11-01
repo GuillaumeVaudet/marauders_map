@@ -1,7 +1,7 @@
 from textual.app import ComposeResult
 from textual.screen import Screen
 from textual.widgets import DirectoryTree, Footer
-from tui.screens.city_input_screen import CityInputScreen
+from tui.screens.data_manager.city_input_screen import CityInputScreen
 
 
 class FileBrowserScreen(Screen):

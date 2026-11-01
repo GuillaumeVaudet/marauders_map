@@ -2,11 +2,11 @@ from textual.app import ComposeResult
 from textual.screen import Screen
 from textual.widgets import Label, ListView, Footer, DirectoryTree
 from tui.widgets.data_manager_menu import DataManagerMenu
-from tui.screens.file_browser_screen import FileBrowserScreen
-from tui.screens.create_database_screen import CreateDatabaseScreen
-from tui.screens.database_select_screen import DatabaseSelectScreen
-from tui.screens.delete_database_screen import DeleteDatabaseScreen
-from tui.screens.confirm_delete_all_screen import ConfirmDeleteAllScreen
+from tui.screens.data_manager.file_browser_screen import FileBrowserScreen
+from tui.screens.data_manager.create_database_screen import CreateDatabaseScreen
+from tui.screens.data_manager.database_select_screen import DatabaseSelectScreen
+from tui.screens.data_manager.delete_database_screen import DeleteDatabaseScreen
+from tui.screens.data_manager.confirm_delete_all_screen import ConfirmDeleteAllScreen
 
 
 class DataManagerScreen(Screen):
