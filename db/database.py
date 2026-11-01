@@ -18,6 +18,20 @@ def get_imported_files(database_connection: Connection):
     )
     return cursor.fetchall()
 
+def delete_database(city: str) -> bool:
+    path = Path(f"data/{city}.db")
+    if path.exists():
+        path.unlink()
+        return True
+    return False
+
+
+def delete_all_databases() -> int:
+    paths = list(Path("data").glob("*.db"))
+    for path in paths:
+        path.unlink()
+    return len(paths)
+
 
 def compute_file_hash(path: str):
     hasher = hashlib.sha256()
