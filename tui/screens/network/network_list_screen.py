@@ -3,7 +3,7 @@ from textual.app import ComposeResult
 from textual.screen import Screen
 from textual.widgets import DataTable, Footer
 from db.database import connect, get_networks
-from tui.screens.network_detail_screen import NetworkDetailScreen
+from tui.screens.network.network_detail_screen import NetworkDetailScreen
 
 
 class NetworkListScreen(Screen):

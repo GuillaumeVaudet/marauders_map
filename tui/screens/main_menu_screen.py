@@ -2,7 +2,7 @@ from textual.app import ComposeResult
 from textual.screen import Screen
 from textual.widgets import ListView
 
-from tui.screens.network_database_select_screen import NetworkDatabaseSelectScreen
+from tui.screens.network.network_database_select_screen import NetworkDatabaseSelectScreen
 from tui.screens.data_manager.data_manager_screen import DataManagerScreen
 from tui.widgets.main_menu import MainMenu
 

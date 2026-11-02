@@ -2,7 +2,7 @@ from textual.app import ComposeResult
 from textual.screen import Screen
 from textual.widgets import ListView, ListItem, Label, Footer
 from db.database import list_databases
-from tui.screens.network_list_screen import NetworkListScreen
+from tui.screens.network.network_list_screen import NetworkListScreen
 
 
 class NetworkDatabaseSelectScreen(Screen):
