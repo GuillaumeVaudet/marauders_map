@@ -1,5 +1,5 @@
 import struct
-
+from models.network import Network
 
 def decode_bssid(frame: bytes) -> str:
     return ":".join(f"{byte:02x}" for byte in frame[16:22])
@@ -33,6 +33,13 @@ def decode_encryption(frame: bytes) -> str:
     if 221 in elements and elements[221][:4] == b"\x00\x50\xf2\x01":
         return "WPA"
     return "WEP"
+
+def decode_network(frame: bytes) -> Network:
+    return Network(
+        bssid=decode_bssid(frame),
+        ssid=decode_ssid(frame),
+        encryption=decode_encryption(frame),
+    )
 
 
 if __name__ == "__main__":

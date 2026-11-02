@@ -5,6 +5,7 @@ import hashlib
 
 from models.metadata import Metadata
 from core.reader import read_records
+from core.frame_decoder import decode_network
 
 
 def list_databases():
@@ -82,6 +83,7 @@ def create_record_table(database_connection: Connection):
     database_connection.execute("""
         CREATE TABLE IF NOT EXISTS record (
             id INTEGER PRIMARY KEY,
+            bssid TEXT,
             node_id INTEGER,
             rssi INTEGER,
             channel INTEGER,
@@ -89,18 +91,36 @@ def create_record_table(database_connection: Connection):
             timestamp INTEGER,
             latitude REAL,
             longitude REAL,
-            frame_len INTEGER
+            frame_len INTEGER,
             frame BLOB
         )
     """)
 
 
-def insert_record(database_connection: Connection, metadata: Metadata):
+def create_network_table(database_connection: Connection):
     database_connection.execute("""
-        INSERT INTO record (node_id, rssi, channel, band, timestamp, 
-        latitude, longitude, frame_len) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-    """, (metadata.node_id, metadata.rssi, metadata.channel, metadata.band, metadata.timestamp, 
-          metadata.latitude, metadata.longitude, metadata.frame_len)
+        CREATE TABLE IF NOT EXISTS network (
+            bssid TEXT PRIMARY KEY,
+            ssid TEXT,
+            encryption TEXT
+        )    
+    """)
+
+
+def insert_record(database_connection: Connection, metadata: Metadata, bssid, frame):
+    database_connection.execute("""
+        INSERT INTO record (bssid, node_id, rssi, channel, band, timestamp, 
+        latitude, longitude, frame_len, frame) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    """, (bssid, metadata.node_id, metadata.rssi, metadata.channel, metadata.band, metadata.timestamp, 
+          metadata.latitude, metadata.longitude, metadata.frame_len, frame)
+    )
+
+
+def insert_network(database_connection, network):
+    database_connection.execute(
+        "INSERT OR IGNORE INTO network (bssid, ssid, encryption) "
+        "VALUES (?, ?, ?)",
+        (network.bssid, network.ssid, network.encryption)
     )
 
 
@@ -109,6 +129,7 @@ def import_file(path, city):
     connection = connect(city)
 
     create_record_table(connection)
+    create_network_table(connection)
     create_imported_file_table(connection)
 
     if is_already_imported(connection, file_hash):
@@ -117,7 +138,9 @@ def import_file(path, city):
         return False
     
     for metadata, frame in read_records(path):
-        insert_record(connection, metadata)
+        network = decode_network(frame)
+        insert_network(connection, network)
+        insert_record(connection, metadata, network.bssid, frame)
 
     mark_as_imported(connection, file_hash, path.name)
     connection.commit()
