@@ -123,6 +123,21 @@ def insert_network(database_connection, network):
         (network.bssid, network.ssid, network.encryption)
     )
 
+def get_networks(database_connection: Connection):
+    cursor = database_connection.execute(
+        "SELECT bssid, ssid, encryption FROM network ORDER BY ssid"
+    )
+    return cursor.fetchall()
+
+
+def get_observations(database_connection: Connection, bssid: str):
+    cursor = database_connection.execute(
+        "SELECT timestamp, latitude, longitude, rssi "
+        "FROM record WHERE bssid = ? ORDER BY timestamp",
+        (bssid,)
+    )
+    return cursor.fetchall()
+
 
 def import_file(path, city):
     file_hash = compute_file_hash(path)
