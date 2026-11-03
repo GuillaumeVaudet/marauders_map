@@ -587,6 +587,124 @@ button:disabled { opacity: 0.5; cursor: progress; }
 
 .htmx-request .loading span { animation: blink 900ms steps(2, jump-none) infinite; }
 
+/* ---------- Map ---------- */
+
+.map-frame {
+  position: relative;
+  flex: 1;
+  min-height: 460px;
+  background: var(--red-line);
+  clip-path: polygon(0 0, calc(100% - 22px) 0, 100% 22px, 100% 100%, 22px 100%, 0 calc(100% - 22px));
+}
+
+#map {
+  position: absolute;
+  inset: 1px;
+  background: var(--void);
+  clip-path: polygon(0 0, calc(100% - 22px) 0, 100% 22px, 100% 100%, 22px 100%, 0 calc(100% - 22px));
+}
+
+.map-hud { position: absolute; z-index: 2; }
+
+.map-hud--title {
+  top: 16px;
+  left: 16px;
+  max-width: calc(100% - 88px);
+  padding: 8px 18px 10px 14px;
+  background: rgb(6 7 12 / 82%);
+  border-left: 4px solid var(--red);
+  pointer-events: none;
+}
+
+.map-hud--title h1 {
+  color: var(--red);
+  font-size: clamp(1.5rem, 3vw, 2.3rem);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+}
+
+.map-zones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  margin-top: 4px;
+  pointer-events: auto;
+}
+
+.map-zones a { color: var(--ink-soft); font-weight: 600; text-transform: uppercase; }
+
+.map-zones a:hover, .map-zones a.is-active { color: var(--cyan); }
+
+.map-hud--controls {
+  top: 34px;
+  right: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.map-button {
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  background: rgb(6 7 12 / 86%);
+  border: 1px solid var(--red-line);
+  color: var(--ink);
+  font: 700 1rem var(--mono);
+  cursor: pointer;
+}
+
+.map-button:hover, .map-button:focus-visible {
+  border-color: var(--cyan);
+  color: var(--cyan);
+  outline: none;
+}
+
+.map-button[aria-pressed="true"] {
+  background: var(--cyan);
+  border-color: var(--cyan);
+  color: var(--void);
+}
+
+.map-hud--readout {
+  bottom: 16px;
+  left: 34px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 16px;
+  margin: 0;
+  padding: 5px 12px;
+  background: rgb(6 7 12 / 82%);
+  pointer-events: none;
+}
+
+.map-hud--readout div { display: flex; gap: 6px; }
+
+.map-hud--readout dt { color: var(--red); font-weight: 700; }
+
+.map-hud--readout dd { color: var(--cyan); }
+
+.map-error {
+  position: absolute;
+  inset: 50% 16px auto;
+  z-index: 3;
+  padding: 12px;
+  background: var(--surface-raised);
+  border-left: 4px solid var(--danger);
+  overflow-wrap: anywhere;
+}
+
+#map .maplibregl-ctrl-attrib {
+  background: rgb(6 7 12 / 78%);
+  color: var(--ink-soft);
+  font: 400 0.68rem var(--mono);
+}
+
+#map .maplibregl-ctrl-attrib a { color: var(--ink-soft); }
+
 /* ---------- Notifications ---------- */
 
 .toast {

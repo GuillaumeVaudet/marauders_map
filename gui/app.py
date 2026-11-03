@@ -9,7 +9,7 @@ from starlette.exceptions import HTTPException
 from starlette.middleware.trustedhost import TrustedHostMiddleware
 
 from gui.common import render
-from gui.routes import data_manager, menu, network, statistics
+from gui.routes import data_manager, map as map_view, menu, network, statistics
 
 SAFE_METHODS = {"GET", "HEAD", "OPTIONS"}
 
@@ -17,8 +17,10 @@ SAFE_METHODS = {"GET", "HEAD", "OPTIONS"}
 # backs up template escaping by blocking inline and third-party scripts.
 CONTENT_SECURITY_POLICY = (
     "default-src 'self'; style-src 'self' 'unsafe-inline'; "
+    "img-src 'self' data: blob:; worker-src 'self' blob:; "  # needed by MapLibre
     "base-uri 'none'; form-action 'self'; frame-ancestors 'none'"
 )
+CACHEABLE_PREFIXES = ("/static/", "/map/tiles/")
 
 app = FastAPI(
     title="Marauders Map",
@@ -41,7 +43,7 @@ async def protect_local_app(request: Request, call_next):
     response = await call_next(request)
     response.headers["Content-Security-Policy"] = CONTENT_SECURITY_POLICY
     response.headers["X-Content-Type-Options"] = "nosniff"
-    if not request.url.path.startswith("/static/"):
+    if not request.url.path.startswith(CACHEABLE_PREFIXES):
         response.headers["Cache-Control"] = "no-store"
     return response
 
@@ -82,7 +84,13 @@ app.mount(
     StaticFiles(directory=Path(__file__).parent / "static"),
     name="static",
 )
+app.mount(
+    "/map/tiles",
+    StaticFiles(directory=map_view.MAPS_DIRECTORY, check_dir=False),
+    name="map-tiles",
+)
 app.include_router(menu.router)
+app.include_router(map_view.router)
 app.include_router(network.router)
 app.include_router(statistics.router)
 app.include_router(data_manager.router)

@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block page_title %}Map{% endblock %}
+
+{% block head_extra %}
+  <link rel="stylesheet" href="/static/vendor/maplibre-gl.css">
+  <script src="/static/vendor/maplibre-gl.js" defer></script>
+  <script src="/static/vendor/pmtiles.js" defer></script>
+  <script src="/static/js/map.js" defer></script>
+{% endblock %}
+
+{# Full page loads here: the map scripts live in <head>, which boosted links do not reload. #}
+{% block body_attributes %}{% endblock %}
+
+{% block navigation_hints %}
+  <span class="hint"><kbd>Drag</kbd>Move</span>
+  <span class="hint"><kbd>Scroll</kbd>Zoom</span>
+  <span class="hint"><kbd>Right drag</kbd>Rotate</span>
+{% endblock %}
+
+{% block main %}
+<div class="map-frame">
+  <div id="map" data-tiles="/map/tiles/{{ title | urlencode }}.pmtiles"></div>
+
+  <div class="map-hud map-hud--title">
+    <p class="eyebrow">{{ section }}</p>
+    <h1>{{ title }}</h1>
+    {% if zones | length > 1 %}
+    <nav class="map-zones" aria-label="Map zones">
+      {% for zone in zones %}
+      <a class="{{ 'is-active' if zone == title }}" href="/map?zone={{ zone | urlencode }}">{{ zone }}</a>
+      {% endfor %}
+    </nav>
+    {% endif %}
+  </div>
+
+  <div class="map-hud map-hud--controls">
+    <button class="map-button" type="button" id="map-zoom-in" aria-label="Zoom in">+</button>
+    <button class="map-button" type="button" id="map-zoom-out" aria-label="Zoom out">&minus;</button>
+    <button class="map-button" type="button" id="map-tilt" aria-pressed="false">3D</button>
+    <button class="map-button" type="button" id="map-reset" aria-label="Reset view">&#8634;</button>
+  </div>
+
+  <dl class="map-hud map-hud--readout mono">
+    <div><dt>LAT</dt><dd id="map-latitude">&mdash;</dd></div>
+    <div><dt>LON</dt><dd id="map-longitude">&mdash;</dd></div>
+    <div><dt>ZOOM</dt><dd id="map-zoom">&mdash;</dd></div>
+  </dl>
+
+  <p class="map-error" id="map-error" role="alert" hidden></p>
+</div>
+{% endblock %}
