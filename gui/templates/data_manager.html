@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="panel panel--narrow">
+  <div class="panel-title"><span>Operations</span></div>
+  <nav class="menu" aria-label="Data manager">
+    <a class="menu-item" href="/data-manager/import" data-nav>Import file</a>
+    <a class="menu-item" href="/data-manager/create" data-nav>Create database</a>
+    <a class="menu-item" href="/data-manager/imported" data-nav>View imported files</a>
+    <a class="menu-item menu-item--danger" href="/data-manager/delete" data-nav>Delete database</a>
+    <a class="menu-item menu-item--danger" href="/data-manager/delete-all" data-nav>Delete all</a>
+  </nav>
+</section>
+{% endblock %}

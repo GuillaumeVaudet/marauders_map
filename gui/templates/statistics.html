@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% from "partials/macros.html" import encryption_tag %}
+{% block content %}
+<dl class="stat-row stat-row--three">
+  <div class="stat panel"><dt>Networks</dt><dd>{{ networks }}</dd></div>
+  <div class="stat panel"><dt>Observations</dt><dd>{{ observations }}</dd></div>
+  <div class="stat panel"><dt>Hidden</dt><dd>{{ hidden }}</dd></div>
+</dl>
+<section class="panel">
+  <div class="panel-title"><span>Encryption breakdown</span></div>
+  {% if breakdown %}
+  <div class="table-wrap">
+    <table class="data-table breakdown">
+      <thead><tr><th>Encryption</th><th class="numeric">Count</th><th class="numeric">Share</th><th>Distribution</th></tr></thead>
+      <tbody>
+        {% for encryption, count, share in breakdown %}
+        <tr tabindex="0" data-nav>
+          <td>{{ encryption_tag(encryption) }}</td>
+          <td class="mono numeric">{{ count }}</td>
+          <td class="mono numeric">{{ "%.1f" | format(share) }}%</td>
+          <td class="distribution"><span class="meter meter--wide" title="{{ encryption }}: {{ count }} networks, {{ '%.1f' | format(share) }}%"><span style="width: {{ share }}%"></span></span></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <p class="empty">No network in this database.</p>
+  {% endif %}
+</section>
+{% endblock %}

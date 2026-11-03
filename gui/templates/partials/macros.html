@@ -1,0 +1,20 @@
+{% macro encryption_tag(encryption) %}
+{%- set kind = {"OPEN": "open", "WEP": "weak", "WPA": "weak"}.get(encryption, "secure") -%}
+<span class="tag tag--{{ kind }}">{{ encryption }}</span>
+{%- endmacro %}
+
+{% macro pagination(page, url, query="?") %}
+{% if page.count > 1 %}
+<nav class="pagination" aria-label="Pages">
+  {% if page.has_previous %}
+  <a class="page-button" href="{{ url }}{{ query }}page={{ page.number - 1 }}"
+     hx-get="{{ url }}{{ query }}page={{ page.number - 1 }}" hx-target="#results" hx-swap="innerHTML" hx-push-url="true" data-page-previous>Previous</a>
+  {% endif %}
+  <span class="page-position">Page <b>{{ page.number }}</b> / {{ page.count }}</span>
+  {% if page.has_next %}
+  <a class="page-button" href="{{ url }}{{ query }}page={{ page.number + 1 }}"
+     hx-get="{{ url }}{{ query }}page={{ page.number + 1 }}" hx-target="#results" hx-swap="innerHTML" hx-push-url="true" data-page-next>Next</a>
+  {% endif %}
+</nav>
+{% endif %}
+{% endmacro %}

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block main %}
+<div class="dialog-stage">
+  <form class="panel dialog" action="/data-manager/import" method="post" hx-disabled-elt="find button[type=submit]">
+    <p class="eyebrow">{{ section }}</p>
+    <h1>{{ title }}</h1>
+    <p class="dialog-detail mono">{{ relative_path }}</p>
+    <input type="hidden" name="path" value="{{ relative_path }}">
+    <label for="city">Enter city name:</label>
+    <input id="city" name="city" placeholder="City name (database)" list="databases" autocomplete="off" required autofocus>
+    <datalist id="databases">
+      {% for city in databases %}<option value="{{ city }}"></option>{% endfor %}
+    </datalist>
+    <div class="dialog-actions">
+      <button class="button button--primary" type="submit" data-nav>Import</button>
+      <a class="button" href="{{ back }}" data-nav>Cancel</a>
+    </div>
+    <p class="loading" role="status">Import in progress<span>...</span></p>
+  </form>
+</div>
+{% endblock %}

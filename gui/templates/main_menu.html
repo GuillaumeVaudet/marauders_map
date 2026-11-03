@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block page_title %}Main Menu{% endblock %}
+{% block header %}{% endblock %}
+
+{% block main %}
+<div class="home">
+  <section class="home-menu">
+    <div class="wordmark">
+      <h1>MARAUDERS</h1>
+      <p>MAP <span>//</span> WARDRIVING CONTROL DECK</p>
+    </div>
+
+    <nav class="menu menu--large" aria-label="Main menu">
+      <a class="menu-item" href="/networks" data-nav>View Networks</a>
+      <a class="menu-item" href="/statistics" data-nav>Statistics</a>
+      <a class="menu-item" href="/data-manager" data-nav>Data Manager</a>
+      <a class="menu-item" href="/settings" data-nav>Settings</a>
+      <form action="/quit" method="post">
+        <button class="menu-item menu-item--muted" type="submit" data-nav>Quit</button>
+      </form>
+    </nav>
+  </section>
+
+  <aside class="panel home-panel" aria-label="Databases">
+    <div class="panel-title"><span>Databases</span><span class="panel-count">{{ databases | length }}</span></div>
+    {% if databases %}
+    <ul class="database-list">
+      {% for city in databases | sort(case_sensitive=False) %}
+      <li>
+        <a href="/networks/{{ city | urlencode }}">
+          <span>{{ city }}</span><span class="database-arrow" aria-hidden="true">&#9656;</span>
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p class="empty">No database yet. Import a capture from the Data Manager.</p>
+    {% endif %}
+  </aside>
+</div>
+{% endblock %}

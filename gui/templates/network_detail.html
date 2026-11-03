@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% from "partials/macros.html" import encryption_tag %}
+{% block extra_hints %}<span class="hint"><kbd>PgUp/PgDn</kbd>Page</span>{% endblock %}
+{% block content %}
+<dl class="stat-row">
+  <div class="stat panel"><dt>BSSID</dt><dd class="stat-text mono">{{ network[0] }}</dd></div>
+  <div class="stat panel"><dt>Encryption</dt><dd class="stat-text">{{ encryption_tag(network[2]) }}</dd></div>
+  <div class="stat panel"><dt>Observations</dt><dd>{{ results.total }}</dd></div>
+  <div class="stat panel"><dt>Strongest signal</dt><dd>{% if strongest is not none %}{{ strongest }}<small>dBm</small>{% else %}&mdash;{% endif %}</dd></div>
+</dl>
+<div id="results">{% include "partials/observation_results.html" %}</div>
+{% endblock %}

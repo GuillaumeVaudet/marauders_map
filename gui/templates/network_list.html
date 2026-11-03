@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block extra_hints %}<span class="hint"><kbd>PgUp/PgDn</kbd>Page</span>{% endblock %}
+{% block content %}
+<form class="search" action="/networks/{{ city | urlencode }}" method="get" role="search"
+      hx-get="/networks/{{ city | urlencode }}"
+      hx-trigger="input changed delay:250ms from:input, submit"
+      hx-target="#results"
+      hx-swap="innerHTML"
+      hx-push-url="true">
+  <label for="network-search">Search</label>
+  <input id="network-search" type="search" name="q" value="{{ q }}" placeholder="BSSID, SSID or encryption" autocomplete="off" data-nav>
+</form>
+<div id="results">{% include "partials/network_results.html" %}</div>
+{% endblock %}

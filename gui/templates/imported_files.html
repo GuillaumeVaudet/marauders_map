@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="panel">
+  <div class="panel-title"><span>Imported files</span><span class="panel-count">{{ files | length }}</span></div>
+  {% if files %}
+  <div class="table-wrap">
+    <table class="data-table">
+      <thead><tr><th>File</th><th>Imported at</th></tr></thead>
+      <tbody>
+        {% for file_name, imported_at in files %}
+        <tr tabindex="0" data-nav><td class="mono">{{ file_name }}</td><td class="mono">{{ imported_at }}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <p class="empty">No file imported in this database.</p>
+  {% endif %}
+</section>
+{% endblock %}

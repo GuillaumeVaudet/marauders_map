@@ -1,0 +1,23 @@
+{% from "partials/macros.html" import encryption_tag, pagination %}
+<section class="panel">
+  <div class="panel-title"><span>Detected networks</span><span class="panel-count">{{ results.total }}</span></div>
+  {% if results.rows %}
+  <div class="table-wrap">
+    <table class="data-table">
+      <thead><tr><th>BSSID</th><th>SSID</th><th>Encryption</th></tr></thead>
+      <tbody>
+        {% for bssid, ssid, encryption in results.rows %}
+        <tr>
+          <td class="mono"><a class="row-link" href="/networks/{{ city | urlencode }}/{{ bssid | urlencode }}" data-nav>{{ bssid }}</a></td>
+          <td>{% if ssid %}{{ ssid }}{% else %}<span class="muted">HIDDEN</span>{% endif %}</td>
+          <td>{{ encryption_tag(encryption) }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {{ pagination(results, "/networks/" ~ (city | urlencode), "?q=" ~ (q | urlencode) ~ "&") }}
+  {% else %}
+  <p class="empty">No network matches this search.</p>
+  {% endif %}
+</section>

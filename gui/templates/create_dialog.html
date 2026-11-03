@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block main %}
+<div class="dialog-stage">
+  <form class="panel dialog" action="/data-manager/create" method="post">
+    <p class="eyebrow">{{ section }}</p>
+    <h1>{{ title }}</h1>
+    <label for="city">New database (city name):</label>
+    <input id="city" name="city" placeholder="City name" autocomplete="off" required autofocus>
+    <div class="dialog-actions">
+      <button class="button button--primary" type="submit" data-nav>Create</button>
+      <a class="button" href="{{ back }}" data-nav>Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

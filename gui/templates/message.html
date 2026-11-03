@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block header %}{% if not offline %}{{ super() }}{% endif %}{% endblock %}
+{% block footer %}{% if not offline %}{{ super() }}{% endif %}{% endblock %}
+{% block main %}
+<div class="dialog-stage">
+  <section class="panel dialog">
+    <p class="eyebrow">{{ section }}</p>
+    <h1>{{ title }}</h1>
+    <p class="dialog-message">{{ message }}</p>
+    {% if hint %}<p class="dialog-detail">{{ hint }}</p>{% endif %}
+    {% if back %}
+    <div class="dialog-actions"><a class="button" href="{{ back }}" data-nav>Back</a></div>
+    {% endif %}
+  </section>
+</div>
+{% endblock %}

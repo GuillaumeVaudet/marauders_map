@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="panel panel--narrow">
+  <div class="panel-title"><span>Select database</span><span class="panel-count">{{ databases | length }}</span></div>
+  {% if databases %}
+  <nav class="menu" aria-label="Databases">
+    {% for city in databases | sort(case_sensitive=False) %}
+    <a class="menu-item {{ 'menu-item--danger' if danger }}" href="{{ base_url }}/{{ city | urlencode }}" data-nav>{{ city }}</a>
+    {% endfor %}
+  </nav>
+  {% else %}
+  <p class="empty">No database yet. Import a capture from the Data Manager.</p>
+  {% endif %}
+</section>
+{% endblock %}

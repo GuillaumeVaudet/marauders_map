@@ -1,0 +1,21 @@
+{% from "partials/macros.html" import pagination %}
+<section class="panel">
+  <div class="panel-title"><span>Observations</span><span class="panel-count">{{ results.total }}</span></div>
+  <div class="table-wrap">
+    <table class="data-table">
+      <thead><tr><th>Timestamp</th><th>Latitude</th><th>Longitude</th><th>RSSI</th><th>Signal</th></tr></thead>
+      <tbody>
+        {% for timestamp, latitude, longitude, rssi in results.rows %}
+        <tr tabindex="0" data-nav>
+          <td class="mono">{{ timestamp if timestamp is not none else "—" }}</td>
+          <td class="mono">{{ latitude if latitude is not none else "—" }}</td>
+          <td class="mono">{{ longitude if longitude is not none else "—" }}</td>
+          <td class="mono">{{ rssi if rssi is not none else "—" }}</td>
+          <td><span class="meter" title="{{ rssi }} dBm"><span style="width: {{ rssi | rssi_percent }}%"></span></span></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {{ pagination(results, "/networks/" ~ (city | urlencode) ~ "/" ~ (network[0] | urlencode)) }}
+</section>

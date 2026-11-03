@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="htmx-config" content='{"allowEval":false,"includeIndicatorStyles":false,"historyCacheSize":0,"refreshOnHistoryMiss":true,"responseHandling":[{"code":"204","swap":false},{"code":"[2345]..","swap":true,"error":false}]}'>
+  <title>{% block page_title %}{{ title | default("Marauders Map") }}{% endblock %} // MARAUDERS MAP</title>
+  <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/static/css/style.css">
+  <script src="/static/vendor/htmx.min.js" defer></script>
+  <script src="/static/js/app.js" defer></script>
+</head>
+<body hx-boost="true" hx-swap="innerHTML show:window:top">
+  <div class="shell">
+    {% block header %}
+    <header class="topbar">
+      <a class="brand" href="/">MARAUDERS<span>MAP</span></a>
+      <nav class="tabs" aria-label="Sections">
+        <a class="tab {{ 'is-active' if active == 'networks' }}" href="/networks">Networks</a>
+        <a class="tab {{ 'is-active' if active == 'statistics' }}" href="/statistics">Statistics</a>
+        <a class="tab {{ 'is-active' if active == 'data-manager' }}" href="/data-manager">Data Manager</a>
+      </nav>
+    </header>
+    {% endblock %}
+
+    <main class="content">
+      {% block main %}
+      <div class="page-heading">
+        <p class="eyebrow">{{ section }}</p>
+        <h1>{{ title }}</h1>
+      </div>
+      {% block content %}{% endblock %}
+      {% endblock %}
+    </main>
+
+    {% block footer %}
+    <footer class="hints">
+      {% if back %}
+      <a class="hint" href="{{ back }}" data-back><kbd>Esc</kbd>Back</a>
+      {% endif %}
+      <span class="hint"><kbd>&uarr;&darr;</kbd>Navigate</span>
+      <span class="hint"><kbd>Enter</kbd>Select</span>
+      {% block extra_hints %}{% endblock %}
+    </footer>
+    {% endblock %}
+  </div>
+
+  {% if toast %}
+  <div class="toast toast--{{ toast.level }}" role="status">{{ toast.message }}</div>
+  {% endif %}
+</body>
+</html>

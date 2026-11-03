@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block main %}
+<div class="dialog-stage">
+  <form class="panel panel--danger dialog" action="{{ action }}" method="post">
+    <p class="eyebrow">{{ section }}</p>
+    <h1>{{ title }}</h1>
+    <p class="dialog-message">{{ message }}</p>
+    <div class="dialog-actions">
+      <button class="button button--danger" type="submit" data-nav>{{ confirm_label }}</button>
+      <a class="button" href="{{ back }}" data-nav autofocus>Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="panel">
+  <div class="panel-title"><span class="mono path-title">./{{ '' if current == '.' else current }}</span></div>
+  <nav class="menu file-list" aria-label="Files">
+    {% if parent is not none %}
+    <a class="menu-item file-row" href="/data-manager/import?path={{ parent | urlencode }}" data-nav><span class="file-kind">DIR</span><span class="file-name">..</span></a>
+    {% endif %}
+    {% for folder in folders %}
+    <a class="menu-item file-row" href="/data-manager/import?path={{ folder | urlencode }}" data-nav><span class="file-kind">DIR</span><span class="file-name">{{ folder.rsplit('/', 1) | last }}/</span></a>
+    {% endfor %}
+    {% for path, size in files %}
+    <a class="menu-item file-row" href="/data-manager/import/file?path={{ path | urlencode }}" data-nav><span class="file-kind file-kind--file">FILE</span><span class="file-name">{{ path.rsplit('/', 1) | last }}</span><span class="file-size">{{ size | file_size }}</span></a>
+    {% endfor %}
+    {% if not folders and not files %}
+    <p class="empty">This folder is empty.</p>
+    {% endif %}
+  </nav>
+</section>
+{% endblock %}
