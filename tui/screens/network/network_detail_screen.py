@@ -1,8 +1,9 @@
 from rich.text import Text
 from textual.app import ComposeResult
 from textual.screen import Screen
-from textual.widgets import DataTable, Footer, Label
+from textual.widgets import DataTable, Footer
 from db.database import connect, get_observations
+from tui.widgets.screen_header import ScreenHeader
 
 
 class NetworkDetailScreen(Screen):
@@ -23,6 +24,6 @@ class NetworkDetailScreen(Screen):
             table.add_row(*(Text(str(cell)) for cell in row))
 
     def compose(self) -> ComposeResult:
-        yield Label(f"Observations for {self.bssid}")
-        yield DataTable()
+        yield ScreenHeader("OBSERVATIONS", f"{self.city} / {self.bssid}")
+        yield DataTable(cursor_type="row", zebra_stripes=True)
         yield Footer()

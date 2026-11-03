@@ -2,6 +2,7 @@ from textual.app import ComposeResult
 from textual.screen import Screen
 from textual.widgets import DataTable, Footer
 from db.database import connect, get_imported_files
+from tui.widgets.screen_header import ScreenHeader
 
 
 class ImportedFilesScreen(Screen):
@@ -20,5 +21,6 @@ class ImportedFilesScreen(Screen):
         table.add_rows(rows)
 
     def compose(self) -> ComposeResult:
-        yield DataTable()
+        yield ScreenHeader("IMPORTED FILES", self.city)
+        yield DataTable(cursor_type="row", zebra_stripes=True)
         yield Footer()

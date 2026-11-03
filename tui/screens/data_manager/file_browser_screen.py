@@ -2,6 +2,7 @@ from textual.app import ComposeResult
 from textual.screen import Screen
 from textual.widgets import DirectoryTree, Footer
 from tui.screens.data_manager.city_input_screen import CityInputScreen
+from tui.widgets.screen_header import ScreenHeader
 
 
 class FileBrowserScreen(Screen):
@@ -13,5 +14,6 @@ class FileBrowserScreen(Screen):
         self.app.push_screen(CityInputScreen(event.path))
 
     def compose(self) -> ComposeResult:
+        yield ScreenHeader("IMPORT FILE", "SELECT CAPTURE")
         yield DirectoryTree(".")
         yield Footer()

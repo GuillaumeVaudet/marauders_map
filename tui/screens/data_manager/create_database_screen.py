@@ -1,6 +1,7 @@
 from pathlib import Path
 
 from textual.app import ComposeResult
+from textual.containers import Vertical
 from textual.screen import ModalScreen
 from textual.widgets import Input, Label
 from db.database import (
@@ -35,5 +36,7 @@ class CreateDatabaseScreen(ModalScreen):
         self.app.pop_screen()
 
     def compose(self) -> ComposeResult:
-        yield Label("New database (city name):")
-        yield Input(placeholder="City name")
+        with Vertical(classes="dialog") as dialog:
+            dialog.border_title = "// CREATE DATABASE"
+            yield Label("New database (city name):", classes="dialog-message")
+            yield Input(placeholder="City name")

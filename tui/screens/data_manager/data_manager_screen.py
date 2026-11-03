@@ -2,6 +2,7 @@ from textual.app import ComposeResult
 from textual.screen import Screen
 from textual.widgets import Label, ListView, Footer, DirectoryTree
 from tui.widgets.data_manager_menu import DataManagerMenu
+from tui.widgets.screen_header import ScreenHeader
 from tui.screens.data_manager.file_browser_screen import FileBrowserScreen
 from tui.screens.data_manager.create_database_screen import CreateDatabaseScreen
 from tui.screens.data_manager.database_select_screen import DatabaseSelectScreen
@@ -29,5 +30,6 @@ class DataManagerScreen(Screen):
             self.notify(f"Data Manager: {selected_id}")
 
     def compose(self) -> ComposeResult:
+        yield ScreenHeader("DATA MANAGER")
         yield DataManagerMenu()
         yield Footer()

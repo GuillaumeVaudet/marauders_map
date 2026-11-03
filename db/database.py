@@ -139,6 +139,35 @@ def get_observations(database_connection: Connection, bssid: str):
     return cursor.fetchall()
 
 
+# ------------------- STATS ----------------------------- #
+
+def get_network_count(database_connection: Connection) -> int:
+    cursor = database_connection.execute("SELECT COUNT(*) FROM network")
+    return cursor.fetchone()[0]
+
+
+def get_observation_count(database_connection: Connection) -> int:
+    cursor = database_connection.execute("SELECT COUNT(*) FROM record")
+    return cursor.fetchone()[0]
+
+
+def get_hidden_count(database_connection: Connection) -> int:
+    cursor = database_connection.execute(
+        "SELECT COUNT(*) FROM network WHERE ssid = ''"
+    )
+    return cursor.fetchone()[0]
+
+
+def get_encryption_breakdown(database_connection: Connection):
+    cursor = database_connection.execute(
+        "SELECT encryption, COUNT(*) FROM network "
+        "GROUP BY encryption ORDER BY COUNT(*) DESC"
+    )
+    return cursor.fetchall()
+
+# ------------------- STATS ----------------------------- #
+
+
 def import_file(path, city):
     file_hash = compute_file_hash(path)
     connection = connect(city)

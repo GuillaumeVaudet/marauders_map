@@ -3,6 +3,7 @@ from textual.screen import Screen
 from textual.widgets import ListView, ListItem, Label, Footer
 from db.database import list_databases
 from tui.screens.network.network_list_screen import NetworkListScreen
+from tui.widgets.screen_header import ScreenHeader
 
 
 class NetworkDatabaseSelectScreen(Screen):
@@ -13,6 +14,7 @@ class NetworkDatabaseSelectScreen(Screen):
         self.app.push_screen(NetworkListScreen(city))
 
     def compose(self) -> ComposeResult:
+        yield ScreenHeader("NETWORKS", "SELECT DATABASE")
         yield ListView(
             *[ListItem(Label(city)) for city in list_databases()]
         )

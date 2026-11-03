@@ -4,6 +4,7 @@ from textual.screen import Screen
 from textual.widgets import DataTable, Footer
 from db.database import connect, get_networks
 from tui.screens.network.network_detail_screen import NetworkDetailScreen
+from tui.widgets.screen_header import ScreenHeader
 
 
 class NetworkListScreen(Screen):
@@ -31,5 +32,6 @@ class NetworkListScreen(Screen):
         self.app.push_screen(NetworkDetailScreen(self.city, bssid))
 
     def compose(self) -> ComposeResult:
-        yield DataTable()
+        yield ScreenHeader("NETWORKS", self.city)
+        yield DataTable(cursor_type="row", zebra_stripes=True)
         yield Footer()

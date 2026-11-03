@@ -1,0 +1,348 @@
+/* ============ MARAUDERS MAP — interface night-circuit ============ */
+/* Les couleurs sont définies dans tui/theme.py :                       */
+/* $primary   corail  structure : cadres, titres, en-têtes              */
+/* $secondary cyan    interaction : sélection, focus, données           */
+/* $error     magenta actions destructrices                             */
+/* $accent    jaune   logo uniquement                                   */
+
+/* ---------- Base ---------- */
+
+Screen {
+    background: $background;
+    color: $foreground;
+    align: center middle;
+    hatch: right $primary 4%;
+}
+
+ModalScreen {
+    background: $background 92%;
+    hatch: none;
+}
+
+/* ---------- En-tête commun ---------- */
+
+ScreenHeader {
+    dock: top;
+    height: 2;
+    padding: 0 2;
+    background: $surface;
+    border-bottom: heavy $primary;
+}
+
+.header-section {
+    width: 1fr;
+    color: $primary;
+    text-style: bold;
+}
+
+.header-context {
+    width: auto;
+    color: $secondary;
+}
+
+/* ---------- Menu principal ---------- */
+
+#menu-box {
+    width: auto;
+    height: auto;
+    align-horizontal: center;
+}
+
+#logo {
+    width: auto;
+    color: $accent;
+    text-style: bold;
+}
+
+#subtitle {
+    width: 100%;
+    margin-bottom: 1;
+    color: $primary;
+    text-style: bold;
+    text-align: center;
+}
+
+/* ---------- Listes et menus ---------- */
+
+ListView {
+    width: 60;
+    max-width: 100%;
+    height: auto;
+    max-height: 80%;
+    min-height: 3;
+    padding: 1 2;
+    background: $surface;
+    border: heavy $primary 60%;
+    border-title-align: center;
+    border-title-color: $primary;
+    border-title-style: bold;
+}
+
+ListView:focus {
+    background-tint: transparent;
+    border: heavy $primary;
+}
+
+MainMenu {
+    width: 46;
+    margin: 0 15;   /* centre le menu sous le logo (76 colonnes) */
+}
+
+ListView > ListItem {
+    padding: 0 1;
+    color: $foreground;
+    background: transparent;
+    border-left: blank;
+}
+
+ListView > ListItem.-hovered {
+    background: $panel;
+}
+
+ListView > ListItem.-highlight,
+ListView:focus > ListItem.-highlight {
+    color: $secondary;
+    background: $secondary 12%;
+    border-left: thick $secondary;
+    text-style: bold;
+}
+
+#delete_database,
+#delete_all,
+#quit {
+    color: $primary;
+}
+
+#delete_database.-highlight,
+#delete_all.-highlight,
+DataManagerMenu:focus > #delete_database.-highlight,
+DataManagerMenu:focus > #delete_all.-highlight {
+    color: $error;
+    background: $error 14%;
+    border-left: thick $error;
+}
+
+/* ---------- Tableaux ---------- */
+
+DataTable {
+    width: 100%;
+    height: 1fr;
+    margin: 1 2;
+    background: $surface;
+    color: $foreground;
+    border: heavy $primary 60%;
+}
+
+DataTable:focus {
+    background-tint: transparent;
+    border: heavy $primary;
+}
+
+DataTable > .datatable--header {
+    background: $panel;
+    color: $primary;
+    text-style: bold;
+}
+
+DataTable > .datatable--even-row {
+    background: $surface;
+}
+
+DataTable > .datatable--odd-row {
+    background: $panel 45%;
+}
+
+DataTable > .datatable--cursor {
+    background: $secondary 22%;
+    color: $secondary;
+    text-style: bold;
+}
+
+DataTable > .datatable--hover {
+    background: $panel;
+}
+
+DataTable > .datatable--header-hover {
+    background: $panel;
+}
+
+StatisticsScreen DataTable,
+ImportedFilesScreen DataTable {
+    height: auto;
+    max-height: 70%;
+}
+
+#totals {
+    width: 100%;
+    margin: 1 2 0 2;
+    padding: 1 2;
+    background: $surface;
+    border-left: thick $secondary;
+    color: $foreground;
+}
+
+/* ---------- Explorateur de fichiers ---------- */
+
+DirectoryTree {
+    height: 1fr;
+    margin: 1 2;
+    padding: 1;
+    background: $surface;
+    border: heavy $primary;
+}
+
+DirectoryTree:focus {
+    background-tint: transparent;
+}
+
+DirectoryTree > .directory-tree--folder {
+    color: $primary;
+    text-style: bold;
+}
+
+DirectoryTree > .directory-tree--file {
+    color: $foreground;
+}
+
+DirectoryTree > .directory-tree--extension {
+    color: $secondary;
+    text-style: none;
+}
+
+DirectoryTree > .directory-tree--hidden {
+    color: $foreground-muted;
+    text-style: none;
+}
+
+DirectoryTree > .tree--guides {
+    color: $primary 35%;
+}
+
+DirectoryTree > .tree--guides-hover,
+DirectoryTree > .tree--guides-selected {
+    color: $primary;
+    text-style: none;
+}
+
+DirectoryTree > .tree--cursor,
+DirectoryTree:focus > .tree--cursor {
+    background: $secondary 22%;
+    color: $secondary;
+    text-style: bold;
+}
+
+DirectoryTree > .tree--highlight-line {
+    background: $panel;
+}
+
+/* ---------- Fenêtres de dialogue ---------- */
+
+.dialog {
+    width: 60;
+    max-width: 90%;
+    height: auto;
+    padding: 1 2;
+    background: $surface;
+    border: heavy $primary;
+    border-title-align: center;
+    border-title-color: $primary;
+    border-title-style: bold;
+}
+
+.dialog.-danger {
+    border: heavy $error;
+    border-title-color: $error;
+}
+
+.dialog-message {
+    width: 100%;
+    margin-bottom: 1;
+    color: $foreground;
+    text-style: bold;
+}
+
+.dialog-actions {
+    width: 100%;
+    height: auto;
+    align-horizontal: center;
+}
+
+Input {
+    background: $background;
+    color: $foreground;
+    border: heavy $primary 60%;
+}
+
+Input:focus {
+    background-tint: transparent;
+    border: heavy $secondary;
+}
+
+Input > .input--placeholder {
+    color: $foreground-muted;
+}
+
+Button {
+    width: 1fr;
+    margin: 0 1;
+    background: $panel;
+    color: $foreground;
+    border: heavy $primary 60%;
+    text-style: bold;
+}
+
+Button:hover {
+    background: $secondary 12%;
+    color: $secondary;
+    border: heavy $secondary;
+}
+
+Button:focus {
+    background: $secondary 22%;
+    background-tint: transparent;
+    color: $secondary;
+    border: heavy $secondary;
+    text-style: bold;
+}
+
+Button.-error {
+    background: $panel;
+    color: $error;
+    border: heavy $error 60%;
+}
+
+Button.-error:hover {
+    background: $error 14%;
+    color: $error;
+    border: heavy $error;
+}
+
+Button.-error:focus {
+    background: $error;
+    color: $background;
+    border: heavy $error;
+    text-style: bold;
+}
+
+/* ---------- Notifications ---------- */
+
+Toast {
+    background: $panel;
+    color: $foreground;
+}
+
+Toast.-information {
+    border-left: thick $secondary;
+}
+
+Toast.-information .toast--title {
+    color: $secondary;
+}
+
+Toast.-warning {
+    border-left: thick $warning;
+}
+
+Toast.-error {
+    border-left: thick $error;
+}
