@@ -36,7 +36,9 @@ To add a capture, open **Data Manager > Import file**, select the file and enter
 the city name. The database `data/<city>.db` is created if it does not exist, and
 a file that was already imported is ignored.
 
-The browser also has a **Map** view. It does not show the networks yet.
+The browser also has a **Map** view. Each network is placed at its strongest
+observation with a GPS position, which is an approximation of where it was seen,
+not the location of the access point.
 
 ## Map
 

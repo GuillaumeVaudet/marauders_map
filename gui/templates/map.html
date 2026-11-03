@@ -15,11 +15,14 @@
   <span class="hint"><kbd>Drag</kbd>Move</span>
   <span class="hint"><kbd>Scroll</kbd>Zoom</span>
   <span class="hint"><kbd>Right drag</kbd>Rotate</span>
+  <span class="hint"><kbd>Click</kbd>Network details</span>
 {% endblock %}
 
 {% block main %}
 <div class="map-frame">
-  <div id="map" data-tiles="/map/tiles/{{ title | urlencode }}.pmtiles"></div>
+  <div id="map"
+       data-tiles="/map/tiles/{{ title | urlencode }}.pmtiles"
+       {% if database %}data-city="{{ database }}" data-networks="/map/networks/{{ database | urlencode }}"{% endif %}></div>
 
   <div class="map-hud map-hud--title">
     <p class="eyebrow">{{ section }}</p>
@@ -27,11 +30,27 @@
     {% if zones | length > 1 %}
     <nav class="map-zones" aria-label="Map zones">
       {% for zone in zones %}
-      <a class="{{ 'is-active' if zone == title }}" href="/map?zone={{ zone | urlencode }}">{{ zone }}</a>
+      <a class="{{ 'is-active' if zone == title }}" href="/map?zone={{ zone | urlencode }}&amp;database={{ (database or '') | urlencode }}">{{ zone }}</a>
       {% endfor %}
     </nav>
     {% endif %}
+    {% if databases %}
+    <nav class="map-zones" aria-label="Databases">
+      {% for city in databases %}
+      <a class="{{ 'is-active' if city == database }}" href="/map?zone={{ title | urlencode }}&amp;database={{ city | urlencode }}">{{ city }}</a>
+      {% endfor %}
+    </nav>
+    {% else %}
+    <p class="map-note">No database</p>
+    {% endif %}
   </div>
+
+  <form class="map-hud map-hud--legend" id="map-legend" aria-label="Filter networks by encryption" hidden>
+    <p class="map-legend-title">Networks <span id="map-network-count"></span></p>
+    <label><input type="checkbox" data-kind="secure" checked><span class="swatch swatch--secure"></span>WPA2 / WPA3<span class="legend-count" data-count="secure"></span></label>
+    <label><input type="checkbox" data-kind="weak" checked><span class="swatch swatch--weak"></span>WPA / WEP<span class="legend-count" data-count="weak"></span></label>
+    <label><input type="checkbox" data-kind="open" checked><span class="swatch swatch--open"></span>Open<span class="legend-count" data-count="open"></span></label>
+  </form>
 
   <div class="map-hud map-hud--controls">
     <button class="map-button" type="button" id="map-zoom-in" aria-label="Zoom in">+</button>
