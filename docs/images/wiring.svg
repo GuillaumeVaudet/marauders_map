@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 720" font-family="'DejaVu Sans Mono','Consolas',monospace">
+  <defs>
+    <style>
+      .box   { fill:#161b22; stroke:#00e5ff; stroke-width:2; rx:8; }
+      .node  { fill:#161b22; stroke:#bc8cff; stroke-width:2; }
+      .title { fill:#e6edf3; font-weight:bold; }
+      .pin   { fill:#9fb0c0; font-size:13px; }
+      .lbl   { fill:#0d1117; font-size:12px; font-weight:bold; }
+      .cap   { fill:#8b98a5; font-size:12px; }
+      .pwr   { stroke:#ff5c57; stroke-width:3; fill:none; }
+      .gnd   { stroke:#6e7681; stroke-width:3; fill:none; }
+      .uart  { stroke:#3fb950; stroke-width:3; fill:none; }
+      .spi   { stroke:#58a6ff; stroke-width:3; fill:none; }
+      .rf    { stroke:#bc8cff; stroke-width:3; stroke-dasharray:7 6; fill:none; }
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1000" height="720" fill="#0d1117"/>
+  <text x="500" y="40" text-anchor="middle" font-size="22" class="title">MARAUDER'S MAP — hardware wiring</text>
+  <text x="500" y="62" text-anchor="middle" class="cap">Node captures Wi-Fi → ESP-NOW → Core adds GPS + time → writes microSD</text>
+
+  <!-- ============ NODE (ESP32-C5) ============ -->
+  <rect class="node" x="60" y="110" width="210" height="110" rx="8"/>
+  <text x="165" y="140" text-anchor="middle" class="title" font-size="15">ESP32-C5</text>
+  <text x="165" y="160" text-anchor="middle" class="cap">Node (capture)</text>
+  <text x="80" y="195" class="pin">5V</text>
+  <text x="80" y="212" class="pin">GND</text>
+
+  <!-- ============ GPS ============ -->
+  <rect class="box" x="730" y="90" width="210" height="140" rx="8"/>
+  <text x="835" y="120" text-anchor="middle" class="title" font-size="15">GPS module</text>
+  <text x="835" y="140" text-anchor="middle" class="cap">NMEA · 9600 baud</text>
+  <text x="750" y="170" class="pin">VCC</text>
+  <text x="750" y="188" class="pin">TX</text>
+  <text x="750" y="206" class="pin">RX</text>
+  <text x="750" y="224" class="pin">GND</text>
+
+  <!-- ============ CORE (ESP32) ============ -->
+  <rect class="box" x="380" y="330" width="250" height="320" rx="8"/>
+  <text x="505" y="360" text-anchor="middle" class="title" font-size="16">ESP32</text>
+  <text x="505" y="380" text-anchor="middle" class="cap">Core</text>
+  <!-- left pins -->
+  <text x="398" y="420" class="pin">5V</text>
+  <text x="398" y="445" class="pin">GND</text>
+  <text x="398" y="470" class="pin">3V3</text>
+  <!-- right pins -->
+  <text x="612" y="420" text-anchor="end" class="pin">GPIO16 · RX2</text>
+  <text x="612" y="445" text-anchor="end" class="pin">GPIO17 · TX2</text>
+  <text x="612" y="490" text-anchor="end" class="pin">GPIO23 · MOSI</text>
+  <text x="612" y="515" text-anchor="end" class="pin">GPIO18 · CLK</text>
+  <text x="612" y="540" text-anchor="end" class="pin">GPIO19 · MISO</text>
+  <text x="612" y="565" text-anchor="end" class="pin">GPIO5 · CS</text>
+
+  <!-- ============ microSD ============ -->
+  <rect class="box" x="760" y="400" width="200" height="170" rx="8"/>
+  <text x="860" y="430" text-anchor="middle" class="title" font-size="15">microSD</text>
+  <text x="860" y="450" text-anchor="middle" class="cap">SPI (VSPI)</text>
+  <text x="780" y="480" class="pin">3V3</text>
+  <text x="780" y="498" class="pin">CS</text>
+  <text x="780" y="516" class="pin">MOSI</text>
+  <text x="780" y="534" class="pin">CLK</text>
+  <text x="780" y="552" class="pin">MISO</text>
+  <text x="780" y="570" class="pin">GND</text>
+
+  <!-- ============ USB ============ -->
+  <rect x="430" y="665" width="150" height="38" rx="6" fill="#161b22" stroke="#ff5c57" stroke-width="2"/>
+  <text x="505" y="689" text-anchor="middle" class="title" font-size="13">USB-C · 5V</text>
+
+  <!-- ============ WIRES ============ -->
+  <!-- USB -> Core -->
+  <path class="pwr" d="M505 665 L505 650"/>
+
+  <!-- Core power -> Node (5V/GND) -->
+  <path class="pwr" d="M380 420 L310 420 L310 195 L270 195"/>
+  <path class="gnd" d="M380 445 L295 445 L295 212 L270 212"/>
+
+  <!-- Node <-> Core : ESP-NOW wireless -->
+  <path class="rf" d="M200 220 C230 300, 340 300, 400 335"/>
+  <text x="250" y="300" class="title" font-size="12" fill="#bc8cff">)))  ESP-NOW</text>
+
+  <!-- GPS -> Core : UART + power -->
+  <path class="pwr"  d="M748 170 L690 170 L690 420 L630 420" opacity="0"/>
+  <path class="uart" d="M748 188 L700 188 L700 420 L632 420"/>
+  <path class="uart" d="M748 206 L690 206 L690 445 L632 445"/>
+  <path class="pwr"  d="M748 170 L710 170 L710 408 L632 418"/>
+  <path class="gnd"  d="M748 224 L680 224 L680 455 L632 447"/>
+
+  <!-- Core -> SD : SPI + power -->
+  <path class="spi" d="M632 490 L700 490 L700 516 L778 516"/>
+  <path class="spi" d="M632 515 L690 515 L690 534 L778 534"/>
+  <path class="spi" d="M632 540 L680 540 L680 552 L778 552"/>
+  <path class="spi" d="M632 565 L670 565 L670 498 L778 498"/>
+  <path class="pwr" d="M418 470 L418 300 L748 300 L748 480 L778 480"/>
+  <path class="gnd" d="M408 445 L360 445 L360 290 L758 290 L758 570 L778 570"/>
+
+  <!-- ============ LEGEND ============ -->
+  <rect x="60" y="610" width="300" height="95" rx="6" fill="#161b22" stroke="#30363d"/>
+  <text x="75" y="632" class="title" font-size="13">Legend</text>
+  <line x1="78" y1="650" x2="108" y2="650" class="pwr"/>   <text x="116" y="654" class="cap">5V / VCC</text>
+  <line x1="78" y1="670" x2="108" y2="670" class="gnd"/>   <text x="116" y="674" class="cap">GND</text>
+  <line x1="78" y1="690" x2="108" y2="690" class="uart"/>  <text x="116" y="694" class="cap">UART (GPS)</text>
+  <line x1="210" y1="650" x2="240" y2="650" class="spi"/>  <text x="248" y="654" class="cap">SPI (SD)</text>
+  <line x1="210" y1="670" x2="240" y2="670" class="rf"/>   <text x="248" y="674" class="cap">ESP-NOW (RF)</text>
+</svg>
