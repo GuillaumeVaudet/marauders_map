@@ -20,3 +20,6 @@ data/*.sqlite*
 data_tests/
 
 data/
+
+# personal notes
+advices/
