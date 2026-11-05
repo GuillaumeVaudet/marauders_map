@@ -46,8 +46,6 @@ capture format already reserves what they need: `node_id` accepts values 1 to 4,
 | Observations with a GPS position | 127,486 (99.5%) |
 | Import time of the reference capture | About 0.7 s (measured on RAM-backed storage) |
 | Application code | About 1,600 lines of Python, plus about 800 of templates and JavaScript |
-| Commits | 34, of which 20 are features |
-| Python development period | 27 October to 4 November 2026 |
 | Automated tests | 0 (manual verification only) |
 | External user tests | None: the tool is for personal use |
 
@@ -73,7 +71,7 @@ clearly enjoyed building this project and enjoy sharing it.
 
 | Challenge | Response | Result |
 | --- | --- | --- |
-| The learning curve of Rust was too steep and slowed the project down | Moved to Python at an early stage (27 October) | Much faster execution and iteration, at the cost of no longer learning Rust through this project |
+| The learning curve of Rust was too steep and slowed the project down | Moved to Python | Much faster execution and iteration, at the cost of no longer learning Rust through this project |
 | The initial scope (4 nodes, Bluetooth, BLE) was too large for the time available | Focused on Wi-Fi frames with one node | A complete, working chain, with the rest deferred |
 | Fragile hardware: my solder joints are not very clean or strong, and the device has no enclosure | Not resolved yet: a 3D-printed case is planned | Short-circuit and reliability risk during outings |
 | No feedback from the device while capturing: I cannot tell whether it is working | Not resolved yet: a screen showing logs is planned | Limits how long an outing can safely be |
@@ -103,8 +101,7 @@ clearly enjoyed building this project and enjoy sharing it.
 ### 2.5 Use of AI
 
 AI assistance was used to quickly obtain the cyberpunk visual design of the web front
-end, and to help write and check the project documentation, including this report. The
-remaining work on the project was done by the author.
+end, and to help write and check the project documentation.
 
 ## 3. Retrospective highlights
 
