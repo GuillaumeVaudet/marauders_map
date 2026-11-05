@@ -6,6 +6,8 @@ observations from a terminal (TUI) or a browser (GUI).
 
 Everything runs locally. The GUI has no login and only listens on `127.0.0.1`.
 
+**Project page:** <https://guillaumevaudet.github.io/maraudeurs_map/>
+
 ![TUI](docs/images/tui.png)
 
 ## Features
