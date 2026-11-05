@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; base-uri 'none'; form-action 'none'">
+  <title>Marauders Map // Wardriving control deck</title>
+  <meta name="description" content="A handmade ESP32 device that listens to Wi-Fi beacons, and the local software that turns captures into a searchable offline map.">
+  <meta name="theme-color" content="#06070c">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="assets/fonts/rajdhani-700.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="assets/style.css">
+  <script src="assets/main.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#chain">Skip to content</a>
+
+  <aside class="tape-zone" aria-label="Notice">
+    <p class="visually-hidden">School project, for educational use only.</p>
+    <div class="tape tape--back" aria-hidden="true">
+      <div class="tape-track">
+        <span class="tape-item"><span class="tape-text">Educational use only // School project</span><span class="tape-hazard"></span></span>
+      </div>
+    </div>
+    <div class="tape tape--front" aria-hidden="true">
+      <div class="tape-track">
+        <span class="tape-item"><span class="tape-text">School project // Educational use only</span><span class="tape-hazard"></span></span>
+      </div>
+    </div>
+  </aside>
+
+  <header class="hero shell" id="top">
+    <div class="hero-menu">
+      <div class="wordmark">
+        <h1>MARAUDERS</h1>
+        <p>MAP <span>//</span> WARDRIVING CONTROL DECK</p>
+      </div>
+      <p class="lede">A handmade device that listens to the Wi-Fi around it, and the software that turns what it hears into a map.</p>
+      <nav class="menu" aria-label="Main menu">
+        <a class="menu-item" href="#chain">Signal chain</a>
+        <a class="menu-item" href="#record">Anatomy of a record</a>
+        <a class="menu-item" href="#hardware">Hardware</a>
+        <a class="menu-item" href="#interfaces">Interfaces</a>
+        <a class="menu-item" href="#results">Results</a>
+        <a class="menu-item menu-item--accent" href="#next">What's next</a>
+      </nav>
+    </div>
+
+    <div class="hero-side">
+      <figure class="frame">
+        <img src="assets/gui-map.webp" width="1280" height="800" alt="The web interface showing clustered Wi-Fi networks on a dark map, with a legend filtering them by encryption.">
+      </figure>
+      <section class="panel" aria-labelledby="status-title">
+        <h2 class="panel-title" id="status-title"><span>System status</span><span class="live">MVP</span></h2>
+        <dl class="status">
+          <div><dt>Hardware</dt><dd class="ok">Working</dd></div>
+          <div><dt>Software</dt><dd class="ok">Working</dd></div>
+          <div><dt>Capture</dt><dd>Wi-Fi 2.4 GHz</dd></div>
+          <div><dt>Nodes</dt><dd>1 of 4 planned</dd></div>
+          <div><dt>Bluetooth / BLE</dt><dd class="wait">Planned</dd></div>
+          <div><dt>Runs</dt><dd>Local and offline</dd></div>
+        </dl>
+      </section>
+    </div>
+  </header>
+
+  <nav class="topbar" aria-label="Sections">
+    <div class="shell topbar-inner">
+      <a class="brand" href="#top">MARAUDERS<span>MAP</span></a>
+      <div class="tabs">
+        <a class="tab" href="#chain">Chain</a>
+        <a class="tab" href="#record">Record</a>
+        <a class="tab" href="#hardware">Hardware</a>
+        <a class="tab" href="#interfaces">Interfaces</a>
+        <a class="tab" href="#results">Results</a>
+        <a class="tab" href="#next">Next</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="shell">
+    <section class="section" id="chain" aria-labelledby="chain-title">
+      <div class="heading">
+        <p class="eyebrow">01 // SIGNAL CHAIN</p>
+        <h2 id="chain-title">From radio wave to map</h2>
+      </div>
+      <p class="intro">Capture and analysis are two separate worlds. The device records in the field with no screen and no connection. The software works later, at the desk, from a file on a microSD card.</p>
+
+      <div class="chain-zones" aria-hidden="true">
+        <span class="zone zone--field">In the field</span>
+        <span class="zone zone--desk">At the desk</span>
+      </div>
+      <ol class="chain">
+        <li class="step step--field">
+          <span class="step-index">01</span>
+          <h3>Node</h3>
+          <p class="step-tech">ESP32-C5</p>
+          <p>Listens in promiscuous mode and forwards beacon frames, untouched, over ESP-NOW.</p>
+        </li>
+        <li class="step step--field">
+          <span class="step-index">02</span>
+          <h3>Core</h3>
+          <p class="step-tech">ESP32 + GPS</p>
+          <p>Receives each frame and adds the current GPS position and UTC time.</p>
+        </li>
+        <li class="step step--field">
+          <span class="step-index">03</span>
+          <h3>microSD</h3>
+          <p class="step-tech">MMAP binary</p>
+          <p>Appends every record to a compact file, keeping the raw frame intact.</p>
+        </li>
+        <li class="step step--desk">
+          <span class="step-index">04</span>
+          <h3>Import</h3>
+          <p class="step-tech">Python + SQLite</p>
+          <p>Decodes frames into one database per city. A file already imported is skipped by its SHA-256 hash.</p>
+        </li>
+        <li class="step step--desk">
+          <span class="step-index">05</span>
+          <h3>Explore</h3>
+          <p class="step-tech">TUI + web GUI</p>
+          <p>Browse networks and statistics in a terminal or a browser, and see them on an offline map.</p>
+        </li>
+      </ol>
+    </section>
+
+    <section class="section" id="record" aria-labelledby="record-title">
+      <div class="heading">
+        <p class="eyebrow">02 // ANATOMY OF A RECORD</p>
+        <h2 id="record-title">What one beacon looks like</h2>
+      </div>
+      <p class="intro">Every observation on the card is 18 bytes of context followed by the raw 802.11 frame. Select a field to find its bytes. This record is synthetic, and it decodes correctly with the project's own parser.</p>
+
+      <div class="record" id="record-explorer">
+        <div class="hex-wrap">
+          <div class="hex" role="img" aria-label="Hexadecimal dump of one 87-byte synthetic record. Each field is listed next to it."><span class="g-context" data-field="node_id">01</span><span class="g-context" data-field="rssi">bd</span><span class="g-context" data-field="channel">06</span><span class="g-context" data-field="band">00</span><span class="g-context" data-field="timestamp">40</span><span class="g-context" data-field="timestamp">02</span><span class="g-context" data-field="timestamp">df</span><span class="g-context" data-field="timestamp">6a</span><span class="g-context" data-field="latitude">06</span><span class="g-context" data-field="latitude">d5</span><span class="g-context" data-field="latitude">2d</span><span class="g-context" data-field="latitude">1e</span><span class="g-context" data-field="longitude">f9</span><span class="g-context" data-field="longitude">c4</span><span class="g-context" data-field="longitude">ca</span><span class="g-context" data-field="longitude">01</span><span class="g-context" data-field="frame_len">45</span><span class="g-context" data-field="frame_len">00</span><span class="g-raw" data-field="frame_control">80</span><span class="g-raw" data-field="frame_control">00</span><span class="g-raw" data-field="duration">00</span><span class="g-raw" data-field="duration">00</span><span class="g-raw" data-field="da">ff</span><span class="g-raw" data-field="da">ff</span><span class="g-raw" data-field="da">ff</span><span class="g-raw" data-field="da">ff</span><span class="g-raw" data-field="da">ff</span><span class="g-raw" data-field="da">ff</span><span class="g-raw" data-field="sa">02</span><span class="g-raw" data-field="sa">00</span><span class="g-raw" data-field="sa">5e</span><span class="g-raw" data-field="sa">00</span><span class="g-raw" data-field="sa">00</span><span class="g-raw" data-field="sa">2a</span><span class="g-decoded" data-field="bssid">02</span><span class="g-decoded" data-field="bssid">00</span><span class="g-decoded" data-field="bssid">5e</span><span class="g-decoded" data-field="bssid">00</span><span class="g-decoded" data-field="bssid">00</span><span class="g-decoded" data-field="bssid">2a</span><span class="g-raw" data-field="sequence">00</span><span class="g-raw" data-field="sequence">00</span><span class="g-raw" data-field="beacon_time">00</span><span class="g-raw" data-field="beacon_time">00</span><span class="g-raw" data-field="beacon_time">00</span><span class="g-raw" data-field="beacon_time">00</span><span class="g-raw" data-field="beacon_time">00</span><span class="g-raw" data-field="beacon_time">00</span><span class="g-raw" data-field="beacon_time">00</span><span class="g-raw" data-field="beacon_time">00</span><span class="g-raw" data-field="interval">64</span><span class="g-raw" data-field="interval">00</span><span class="g-decoded" data-field="capability">11</span><span class="g-decoded" data-field="capability">00</span><span class="g-decoded" data-field="ssid">00</span><span class="g-decoded" data-field="ssid">09</span><span class="g-decoded" data-field="ssid">44</span><span class="g-decoded" data-field="ssid">65</span><span class="g-decoded" data-field="ssid">6d</span><span class="g-decoded" data-field="ssid">6f</span><span class="g-decoded" data-field="ssid">2d</span><span class="g-decoded" data-field="ssid">43</span><span class="g-decoded" data-field="ssid">61</span><span class="g-decoded" data-field="ssid">66</span><span class="g-decoded" data-field="ssid">65</span><span class="g-decoded" data-field="rsn">30</span><span class="g-decoded" data-field="rsn">14</span><span class="g-decoded" data-field="rsn">01</span><span class="g-decoded" data-field="rsn">00</span><span class="g-decoded" data-field="rsn">00</span><span class="g-decoded" data-field="rsn">0f</span><span class="g-decoded" data-field="rsn">ac</span><span class="g-decoded" data-field="rsn">04</span><span class="g-decoded" data-field="rsn">01</span><span class="g-decoded" data-field="rsn">00</span><span class="g-decoded" data-field="rsn">00</span><span class="g-decoded" data-field="rsn">0f</span><span class="g-decoded" data-field="rsn">ac</span><span class="g-decoded" data-field="rsn">04</span><span class="g-decoded" data-field="rsn">01</span><span class="g-decoded" data-field="rsn">00</span><span class="g-decoded" data-field="rsn">00</span><span class="g-decoded" data-field="rsn">0f</span><span class="g-decoded" data-field="rsn">ac</span><span class="g-decoded" data-field="rsn">02</span><span class="g-decoded" data-field="rsn">00</span><span class="g-decoded" data-field="rsn">00</span></div>
+          <p class="hex-legend"><span class="l-context">Added by the device</span><span class="l-decoded">Decoded by the app</span><span class="l-raw">Kept, not used yet</span></p>
+        </div>
+        <div class="fields">
+          <button class="field field--context" type="button" data-field="node_id" aria-pressed="false"><b>Node</b><code>1</code><small>Which node heard it</small></button>
+          <button class="field field--context" type="button" data-field="rssi" aria-pressed="false"><b>Signal</b><code>-67 dBm</code></button>
+          <button class="field field--context" type="button" data-field="channel" aria-pressed="false"><b>Channel</b><code>6</code></button>
+          <button class="field field--context" type="button" data-field="band" aria-pressed="false"><b>Band</b><code>0 = 2.4 GHz</code></button>
+          <button class="field field--context" type="button" data-field="timestamp" aria-pressed="false"><b>Time</b><code>2026-10-26 07:33 UTC</code><small>Unix seconds, from GPS</small></button>
+          <button class="field field--context" type="button" data-field="latitude" aria-pressed="false"><b>Latitude</b><code>50.6320134</code><small>Stored as degrees × 1e7</small></button>
+          <button class="field field--context" type="button" data-field="longitude" aria-pressed="false"><b>Longitude</b><code>3.0065913</code><small>Stored as degrees × 1e7</small></button>
+          <button class="field field--context" type="button" data-field="frame_len" aria-pressed="false"><b>Frame length</b><code>69 bytes</code><small>Where the next record begins</small></button>
+          <button class="field field--decoded" type="button" data-field="bssid" aria-pressed="false"><b>BSSID</b><code>02:00:5e:00:00:2a</code><small>Identifies the network</small></button>
+          <button class="field field--decoded" type="button" data-field="ssid" aria-pressed="false"><b>SSID</b><code>Demo-Cafe</code><small>Empty when hidden</small></button>
+          <button class="field field--decoded" type="button" data-field="capability" aria-pressed="false"><b>Privacy bit</b><code>set</code><small>Clear means an open network</small></button>
+          <button class="field field--decoded" type="button" data-field="rsn" aria-pressed="false"><b>RSN element</b><code>WPA2/WPA3</code><small>Its presence gives the encryption</small></button>
+          <button class="field field--raw" type="button" data-field="frame_control" aria-pressed="false"><b>Frame type</b><code>beacon</code></button>
+          <button class="field field--raw" type="button" data-field="duration" aria-pressed="false"><b>Duration</b><code>0</code></button>
+          <button class="field field--raw" type="button" data-field="da" aria-pressed="false"><b>Destination</b><code>broadcast</code></button>
+          <button class="field field--raw" type="button" data-field="sa" aria-pressed="false"><b>Source</b><code>02:00:5e:00:00:2a</code></button>
+          <button class="field field--raw" type="button" data-field="sequence" aria-pressed="false"><b>Sequence</b><code>0</code></button>
+          <button class="field field--raw" type="button" data-field="beacon_time" aria-pressed="false"><b>AP clock</b><code>0</code></button>
+          <button class="field field--raw" type="button" data-field="interval" aria-pressed="false"><b>Interval</b><code>100 TU</code></button>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="hardware" aria-labelledby="hardware-title">
+      <div class="heading">
+        <p class="eyebrow">03 // HARDWARE</p>
+        <h2 id="hardware-title">Built by hand</h2>
+      </div>
+      <div class="split">
+        <figure class="frame frame--light">
+          <img src="assets/wiring.svg" width="1000" height="720" loading="lazy" alt="Wiring diagram: the ESP32-C5 node talks to the ESP32 core over ESP-NOW. The core connects to a GPS module over UART and to a microSD module over SPI.">
+          <figcaption>Prototype wiring: GPS over UART, microSD over SPI, node over ESP-NOW.</figcaption>
+        </figure>
+        <div class="prose">
+          <p>This project was my first step into electronics: back to the basics of electricity, and learning how to connect modules together. It was the part I enjoyed most, and it brought back what I learned as a military radio specialist.</p>
+          <p>Keeping GPS and storage on the Core keeps the Node simple. Decoding happens later on the computer, so a decoder fix can apply to data that was already captured.</p>
+          <ul class="spec">
+            <li><span>Firmware</span>C++ on ESP-IDF, three FreeRTOS tasks</li>
+            <li><span>Radio link</span>ESP-NOW v2, with fragmented frames reassembled</li>
+            <li><span>Position</span>NMEA over UART, stored as integers (degrees × 1e7)</li>
+            <li><span>Storage</span>Flushed to the card every 20 records</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="interfaces" aria-labelledby="interfaces-title">
+      <div class="heading">
+        <p class="eyebrow">04 // INTERFACES</p>
+        <h2 id="interfaces-title">Two ways in, same data</h2>
+      </div>
+      <p class="intro">The terminal is for quick, keyboard-driven use. The browser adds search, pagination and the map. Both read the same local databases, and no account or internet connection is needed.</p>
+
+      <div class="gallery">
+        <figure class="frame">
+          <img src="assets/gui-networks.webp" width="1280" height="800" loading="lazy" alt="Web interface: searchable list of networks with BSSID, SSID and encryption tags.">
+          <figcaption><span>GUI</span>Search as you type</figcaption>
+        </figure>
+        <figure class="frame">
+          <img src="assets/gui-statistics.webp" width="1280" height="800" loading="lazy" alt="Web interface: totals of networks, observations and hidden networks, with an encryption breakdown.">
+          <figcaption><span>GUI</span>Statistics per database</figcaption>
+        </figure>
+        <figure class="frame">
+          <img src="assets/tui-networks.webp" width="1216" height="730" loading="lazy" alt="Terminal interface: table of networks with BSSID, SSID and encryption.">
+          <figcaption><span>TUI</span>The same list in a terminal</figcaption>
+        </figure>
+        <figure class="frame">
+          <img src="assets/gui-import.webp" width="1280" height="800" loading="lazy" alt="Web interface: dialog importing a capture file into a city database.">
+          <figcaption><span>GUI</span>Import a capture into a city</figcaption>
+        </figure>
+      </div>
+      <p class="note">Screens show synthetic data. No real network or location is published on this page.</p>
+    </section>
+
+    <section class="section" id="results" aria-labelledby="results-title">
+      <div class="heading">
+        <p class="eyebrow">05 // RESULTS</p>
+        <h2 id="results-title">What one capture heard</h2>
+      </div>
+
+      <dl class="stat-row">
+        <div class="panel stat"><dt>Field capture</dt><dd>83<small>min</small></dd></div>
+        <div class="panel stat"><dt>Networks</dt><dd>4,997</dd></div>
+        <div class="panel stat"><dt>Observations</dt><dd>128,140</dd></div>
+        <div class="panel stat"><dt>With GPS fix</dt><dd>99.5<small>%</small></dd></div>
+      </dl>
+
+      <div class="split split--even">
+        <section class="panel" aria-labelledby="breakdown-title">
+          <h3 class="panel-title" id="breakdown-title"><span>Encryption breakdown</span><span class="panel-count">4,997</span></h3>
+          <ul class="bars">
+            <li><span class="tag">WPA2/WPA3</span><span class="meter"><span class="fill w94"></span></span><span class="bar-value">4,701<small>94.1%</small></span></li>
+            <li><span class="tag tag--open">OPEN</span><span class="meter"><span class="fill fill--open w5"></span></span><span class="bar-value">270<small>5.4%</small></span></li>
+            <li><span class="tag tag--weak">WPA</span><span class="meter"><span class="fill fill--weak w1"></span></span><span class="bar-value">19<small>0.4%</small></span></li>
+            <li><span class="tag tag--weak">WEP</span><span class="meter"><span class="fill fill--weak w1"></span></span><span class="bar-value">7<small>0.1%</small></span></li>
+          </ul>
+          <p class="note">WPA and WEP are recomputed from the stored frames: the current app still reports 17 of these WPA networks as WEP, a known defect.</p>
+        </section>
+
+        <section class="panel" aria-labelledby="objectives-title">
+          <h3 class="panel-title" id="objectives-title"><span>Initial objectives</span><span class="panel-count">4 / 7 reached</span></h3>
+          <ul class="objectives">
+            <li><span>Wi-Fi capture</span><span class="tag">Done</span></li>
+            <li><span>GPS position on each capture</span><span class="tag">Done</span></li>
+            <li><span>Web interface</span><span class="tag">Done</span></li>
+            <li><span>Interactive map</span><span class="tag">Done</span></li>
+            <li><span>4 capture nodes <em>1 built</em></span><span class="tag tag--weak">Partial</span></li>
+            <li><span>Bluetooth and BLE</span><span class="tag tag--weak">Deferred</span></li>
+            <li><span>CSV recording <em>binary on the card, CSV planned as an export</em></span><span class="tag tag--weak">Changed</span></li>
+          </ul>
+        </section>
+      </div>
+
+      <h3 class="subheading">What I learned</h3>
+      <div class="cards">
+        <article class="card">
+          <h4>Ship one complete chain</h4>
+          <p>Four nodes, Bluetooth and BLE were too much at once. Narrowing the scope to Wi-Fi with one node gave a result that works from end to end.</p>
+        </article>
+        <article class="card">
+          <h4>Pick the tool you can iterate with</h4>
+          <p>The project started in Rust, but the learning curve slowed it down. Moving to Python made it much faster to build and test ideas.</p>
+        </article>
+        <article class="card">
+          <h4>A device needs to talk back</h4>
+          <p>With no screen, I can't tell during an outing whether the capture is running. That limits how long I can safely stay out.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="next" aria-labelledby="next-title">
+      <div class="heading">
+        <p class="eyebrow">06 // WHAT'S NEXT</p>
+        <h2 id="next-title">The rest of the plan</h2>
+      </div>
+      <div class="split split--even">
+        <ol class="roadmap">
+          <li><span>Harden the device</span>Cleaner solder joints, and a 3D-printed case to prevent short circuits.</li>
+          <li><span>Add a log screen</span>See during capture whether something is wrong, and allow longer outings.</li>
+          <li><span>Extend capture</span>Up to 4 nodes, then Bluetooth and BLE. The format already reserves the fields.</li>
+          <li><span>Fix and test</span>Correct the known decoding and error-handling defects, and add automated tests.</li>
+          <li><span>Add exports</span>Including CSV.</li>
+        </ol>
+        <div class="panel panel--limits">
+          <h3 class="panel-title"><span>Known limits today</span></h3>
+          <ul class="limits">
+            <li>The hardware is still fragile and has no enclosure.</li>
+            <li>The code has no automated tests yet.</li>
+            <li>A map position shows where a network was heard, not where the access point is.</li>
+            <li>Nobody else has used the tool: it is built for my own use.</li>
+          </ul>
+          <h3 class="panel-title panel-title--spaced"><span>Responsible by design</span></h3>
+          <p>Capture is passive: the device only listens to public beacons, and never connects to or attacks a network. Captures stay on my machine and out of the repository, because they link networks to places and times.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="shell footer-inner">
+      <div>
+        <p class="brand">MARAUDERS<span>MAP</span></p>
+        <p class="muted">A solo school project by Guillaume Vaudet, for educational use only.</p>
+      </div>
+      <ul class="stack" aria-label="Technologies">
+        <li>ESP32</li><li>ESP-IDF</li><li>Python</li><li>SQLite</li><li>Textual</li><li>FastAPI</li><li>HTMX</li><li>MapLibre</li><li>PMTiles</li>
+      </ul>
+      <nav class="footer-links" aria-label="Project links">
+        <a class="button button--primary" href="https://github.com/GuillaumeVaudet/maraudeurs_map">Source on GitHub</a>
+        <a class="button" href="https://github.com/GuillaumeVaudet/maraudeurs_map/blob/main/docs/technical-documentation.md">Technical docs</a>
+      </nav>
+      <p class="credit">Map data © <a href="https://openstreetmap.org/copyright">OpenStreetMap</a> contributors, via <a href="https://protomaps.com">Protomaps</a>.</p>
+    </div>
+  </footer>
+</body>
+</html>
